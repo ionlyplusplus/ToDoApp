@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>main home page</title>
+    <style>
+
+        *{
+            box-sizing: border-box;
+            width: inherit;
+        }
+        body {
+            display: flex;
+            border: 3px solid;
+
+        }
+        .connected,
+        .notconnected
+        {
+
+            display: flex;
+        }
+
+        .main_div,
+        .login_div
+        {
+            /* display: flex; */
+            align-items: center;
+            width: inherit;
+            border: 3px solid;
+
+    
+        }
+        .login_div{
+            display: none;
+        }
+
+        .blurred{
+            filter : blur(5px);
+        }
+        </style>
+</head>
+<body>
+    <div  class="main_div">
+
+        <header>
+            {% if user.is_authenticated %}
+            <div class="connected">
+                <button>profile</button>
+                <button>notification</button>
+            </div>
+            {% else %}
+            <div class="notconnected">
+                <button class="loginn">login/signup</button>
+            </div>
+            {% endif %}
+        </header>
+        <main>
+
+            <p>if not login</p>
+            <navbar>
+                <button>roadmao</button>
+                <button>actu/info</button>
+            </navbar>
+            <p>if login</p>
+            <navbar>
+                <button>objectif</button> 
+                <button>specefic feeds</button>
+            </navbar>
+            
+        </main>
+    </div>
+    <div class="login_div">
+        <input class='useremail' type="text" class="username" placeholder="username or email" required>
+        <input class="passwordu" type="password" class="username" placeholder="password" required>
+        <button type="submit" class="submiit" >connect</button>
+        <button class="goback" >goback</button>
+        other ways to connect like gmail
+    </div>
+    </body>
+    <script>
+        document.querySelector('.loginn').onclick = function(){
+            document.querySelector('.main_div').classList.add('blurred');
+            document.querySelector('.login_div').style.display = 'flex';
+        };
+
+        document.querySelector('.goback').onclick = function(){
+            document.querySelector('.main_div').classList.remove('blurred');
+            document.querySelector('.login_div').style.display = 'none';
+        };
+
+
+        document.querySelector('.submiit').onclick = function(){
+            email = document.querySelector('useremail').value()
+            password = document.querySelector('passwordu').value()
+            if (email && password){
+                fetch('/login/',{
+
+                    method : 'POST',
+                    headers : {
+                        'Content-Type' : 'application/json'
+                    },
+                    body : JSON.stringify({
+                        'email' : email,
+                        'password': password,
+                    })
+                })
+                .then(response => {
+                    if (!response.ok){
+                        throw (new Error('Network response as not ok'));
+                    }
+                    return reponse.json();
+                })
+                .then(data =>{
+                    
+                })
+            }
+            else
+            {
+                console.log('errorr')    
+            }
+        };
+
+        </script>
+</html>
